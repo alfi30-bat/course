@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prof. Smith's Educational Hub</title>
+    <style>
+        :root {
+            --primary-color: #1a237e; /* Dark Blue */
+            --secondary-color: #4fc3f7; /* Light Blue */
+            --accent-color: #ff4081;
+            --background-color: #e3f2fd;
+            --text-color: #263238;
+        }
+        body {
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            background-color: var(--background-color);
+        }
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            opacity: 0.8;
+            z-index: 0;
+        }
+        header * {
+            position: relative;
+            z-index: 1;
+        }
+        nav {
+            background-color: var(--primary-color);
+            padding: 0.5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+        }
+        nav ul li {
+            margin: 0 1rem;
+        }
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s ease;
+            font-weight: 500;
+        }
+        nav ul li a:hover {
+            color: var(--secondary-color);
+        }
+        main {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        .course-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        .course-card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .course-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        .course-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        .course-card-content {
+            padding: 1.5rem;
+        }
+        .course-card h3 {
+            margin-top: 0;
+            color: var(--primary-color);
+        }
+        .btn {
+            display: inline-block;
+            background-color: var(--secondary-color);
+            color: var(--primary-color);
+            padding: 0.75rem 1.5rem;
+            text-decoration: none;
+            border-radius: 30px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .btn:hover {
+            background-color: var(--accent-color);
+            color: white;
+            transform: scale(1.05);
+        }
+        #login-form {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        #login-form input {
+            display: block;
+            width: 100%;
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            transition: border-color 0.3s ease;
+        }
+        #login-form input:focus {
+            border-color: var(--secondary-color);
+            outline: none;
+        }
+        footer {
+            background-color: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            margin-top: 2rem;
+        }
+        @media (max-width: 768px) {
+            nav ul {
+                flex-direction: column;
+                align-items: center;
+            }
+            nav ul li {
+                margin: 0.5rem 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Prof. Smith's Educational Hub</h1>
+        <p>Empowering Minds, Shaping Futures</p>
+    </header>
+    <nav>
+        <ul>
+            <li><a href="#home">Home</a></li>
+            <li><a href="dashboard.html">Courses</a></li>
+            <li><a href="#about">About</a></li>
+            {% if user.is_authenticated %}
+            <li><a id="link" class="nav-item nav-link" href="{% url 'course:dash' %}">dashboard</a></li>
+
+            <li><a class="nav-item nav-link" href="{% url 'logout' %}">Logout</a></li>
+            <!-- In a template 
+            <p id="profession">Your profession is: {{ user.profession }}</p>-->
+
+            {% else %}
+                <li><a class="nav-item nav-link" href="{% url 'login' %}">Login</a></li>
+                <li><a class="nav-item nav-link" href="{% url 'role_selection' %}">Sign Up</a></li>
+            {% endif %}            
+        </ul>
+    </nav>
+    <main>
+        <section id="home">
+            <h2>Welcome to My Educational Hub</h2>
+            <p>Discover a world of knowledge with our expertly crafted courses. Whether you're a student looking to excel in your studies or a professional seeking to upgrade your skills, we have the perfect program for you.</p>
+        </section>
+        <section id="courses">
+            <h2>Featured Courses</h2>
+            <div class="course-grid">
+                <div class="course-card">
+                    <img src="/api/placeholder/400/200" alt="Advanced Mathematics">
+                    <div class="course-card-content">
+                        <h3 id="alfred">Advanced Mathematics</h3>
+                        <p>Master complex mathematical concepts and problem-solving techniques.</p>
+                        <a href="{% url 'course:course_detail' course_id='alfred' %}" class="btn">Learn More</a>
+                    
+                    </div>
+                </div>
+                <div class="course-card">
+                    <img src="/api/placeholder/400/200" alt="Creative Writing Workshop">
+                    <div class="course-card-content">
+                        <h3>Creative Writing Workshop</h3>
+                        <p>Unlock your creative potential and hone your writing skills.</p>
+                        <a href="#" class="btn">Learn More</a>                   
+                    </div>
+                </div>
+                <div class="course-card">
+                    <img src="/api/placeholder/400/200" alt="Data Science Fundamentals">
+                    <div class="course-card-content">
+                        <h3>Data Science Fundamentals</h3>
+                        <p>Learn to analyze and interpret complex data sets.</p>
+                        <a href="#" class="btn">Learn More</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section id="about">
+            <h2>About Prof. Smith</h2>
+            <p>With over 15 years of experience in education, Prof. Smith is dedicated to providing high-quality, engaging courses that inspire and challenge students. Our mission is to make learning accessible, enjoyable, and rewarding for everyone.</p>
+        </section>
+        <section id="contact">
+            <h2>Contact Us</h2>
+            <p>Have questions or need more information? Get in touch with us:</p>
+            <p>Email: info@profsmith.edu</p>
+            <p>Phone: (555) 123-4567</p>
+        </section>
+        <section id="login" style="display: none;">
+            <h2>Login</h2>
+            <form id="login-form" method="POST">
+                <input type="email" id="email" placeholder="Email" required>
+                <input type="password" id="password" placeholder="Password" required>
+                <button type="submit" class="btn">Login</button>
+            </form>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 Prof. Smith's Educational Hub. All rights reserved.</p>
+    </footer>
+    <script>
+    document.getElementById('login-link').addEventListener('click', function(e) {
+            e.preventDefault();
+            document.querySelectorAll('main > section').forEach(section => section.style.display = 'none');
+            document.getElementById('login').style.display = 'block';
+        });
+
+        document.getElementById('login-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Login functionality would be implemented here. This is just a demo.');
+        });
+    function course_send(value){
+        var courseID = document.getElementById(value+"1").innerText;
+        var courseLink = document.getElementById(value);
+        courseLink.href = "{% url 'course:course_detail' course_id=0 %}".replace('0', courseID);
+    };
+    
+
+
+
+</script>
+
+</html>

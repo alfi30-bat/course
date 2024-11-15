@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="text-center mb-4">Choose Your Role</h2>
+                    <div class="d-flex justify-content-around">
+                        <a href="{% url 'teacher_signup' %}" class="btn btn-primary btn-lg">Teacher</a>
+                        <a href="{% url 'student_signup' %}" class="btn btn-success btn-lg">Student</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

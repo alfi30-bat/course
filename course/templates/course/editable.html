@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prof. Smith's Educational Hub - {{ course.title }}</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.27.2/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #5C6BC0; /* Indigo */
+            --secondary-color: #424242; /* Grey */
+            --accent-color: #F9A825; /* Yellow */
+            --background-color: #F3F3F3;
+            --text-color: #212121;
+        }
+        body {
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            background-color: var(--background-color);
+        }
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        nav {
+            background-color: var(--secondary-color);
+            padding: 0.5rem;
+            animation: slideIn 0.5s ease-in-out;
+        }
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+        }
+        nav ul li {
+            margin: 0 1rem;
+        }
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        nav ul li a:hover {
+            color: var(--accent-color);
+        }
+        main {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        .course-header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 2rem;
+            border-radius: 8px 8px 0 0;
+            text-align: center;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        .course-content {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 0 0 8px 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            animation: slideUp 0.5s ease-in-out;
+        }
+        .teacher-info {
+            display: flex;
+            align-items: center;
+            margin-top: 2rem;
+            padding: 1rem;
+            background-color: #F3F3F3;
+            border-radius: 8px;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        .teacher-info img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            margin-right: 2rem;
+            object-fit: cover;
+        }
+        .apply-button {
+            display: inline-block;
+            background-color: var(--accent-color);
+            color: white;
+            padding: 1rem 2rem;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+            margin-top: 1rem;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        .apply-button:hover {
+            background-color: #F57F17;
+        }
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        .form-label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text-color);
+        }
+        .form-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ccc;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            transition: all 0.3s ease-in-out;
+        }
+        .form-input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0.5rem rgba(92, 107, 192, 0.25);
+            outline: none;
+        }
+        #course-form {
+            width: 100%;
+            justify-content: center;
+            display: grid;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        .hidden, #course-detail {
+            background-color: #fff;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 0 1rem rgba(0, 0, 0, 0.1);
+        }
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+        @keyframes slideIn {
+            0% {
+                transform: translateY(-100%);
+            }
+            100% {
+                transform: translateY(0);
+            }
+        }
+        @keyframes slideUp {
+            0% {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+            100% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <header>
+        <h1>Prof. Smith's Educational Hub</h1>
+    </header>
+    <nav>
+        <ul>
+            <li><a href="{% url 'main' %}">Home</a></li>
+            <li><a href="#">Courses</a></li>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Contact</a></li>
+            <li><a href="#">Login</a></li>
+        </ul>
+    </nav>
+    <main>
+        <div class="course-header">
+            <h1 class="text-3xl font-bold">{{ course.title }}</h1>
+        </div>
+        <div class="course-content">
+            <div class="form-group">
+                <label class="form-label">Overview:</label>
+                <p id="overview">{{ course.overview }}</p>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Outline:</label>
+                <p id="outline">{{ course.outline }}</p>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Description:</label>
+                <p id="description">{{ course.description|linebreaks }}</p>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Duration:</label>
+                <p id="duration">{{ course.duration }} hours</p>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Level:</label>
+                <p id="level">{{ course.level }}</p>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Prerequisites:</label>
+                <p id="prerequisites">{{ course.prerequisites }}</p>
+            </div>
+            <div class="teacher-info">
+                {% if course.instructor_picture %}
+                <img src="{{ course.instructor_picture.url }}" alt="{{ course.instructor_name }}" class="w-24 h-24 rounded-full">
+                {% endif %}
+                <div>
+                    <h3 id="instructor-name" class="text-lg font-bold">{{ course.instructor_name }}</h3>
+                    <p id="instructor-bio">{{ course.instructor_bio }}</p>
+                </div>
+            </div>
+            <a href="#" class="apply-button">Apply Now</a>
+        </div>
+        <div id="edit-mode" class="hidden">
+            <form id="course-form">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="title" class="form-label">Title:</label>
+                    <input type="text" id="title" name="title" class="form-input" value="{{ course.title }}">
+                </div>
+                <div class="form-group">
+                    <label for="overview" class="form-label">Overview:</label>
+                    <textarea id="overview" name="overview" class="form-input">{{ course.overview }}</textarea>
+                </div>
+                <div class="form-group">
+                    <label for="outline" class="form-label">Outline:</label>
+                    <textarea id="outline" name="outline" class="form-input">{{ course.outline }}</textarea>
+                </div>
+                <div class="form-group">
+                    <label for="description" class="form-label">Description:</label>
+                    <textarea id="description" name="description" class="form-input">{{ course.description }}</textarea>
+                </div>
+                <div class="form-group">
+                    <label for="duration" class="form-label">Duration:</label>
+                    <input type="number" id="duration" name="duration" class="form-input" value="{{ course.duration }}">
+                </div>
+                <div class="form-group">
+                    <label for="level" class="form-label">Level:</label>
+                    <input type="text" id="level" name="level" class="form-input" value="{{ course.level }}">
+                </div>
+                <div class="form-group">
+                    <label for="prerequisites" class="form-label">Prerequisites:</label>
+                    <textarea id="prerequisites" name="prerequisites" class="form-input">{{ course.prerequisites }}</textarea>
+                </div>
+                <div class="form-group">
+                    <label for="instructor_name" class="form-label">Instructor Name:</label>
+                    <input type="text" id="instructor_name" name="instructor_name" class="form-input" value="{{ course.instructor_name }}">
+                </div>
+                <div class="form-group">
+                    <label for="instructor_bio" class="form-label">Instructor Bio:</label>
+                    <textarea id="instructor_bio" name="instructor_bio" class="form-input">{{ course.instructor_bio }}</textarea>
+                </div>
+                <div class="form-group">
+                    <label for="instructor_picture" class="form-label">Instructor Picture:</label>
+                    <input type="file" id="instructor_picture" name="instructor_picture" class="form-input">
+                </div>
+                <div class="flex justify-end">
+                    <button type="button" id="edit-btn" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2">Edit</button>
+                    <button type="submit" id="save-btn" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Save</button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <script>
+        const editBtn = document.getElementById('edit-btn');
+        const saveBtn = document.getElementById('save-btn');
+        const courseDetail = document.getElementById('course-detail');
+        const editMode = document.getElementById('edit-mode');
+        const form = document.getElementById('course-form');
+
+        editBtn.addEventListener('click', () => {
+            courseDetail.classList.add('hidden');
+            editMode.classList.remove('hidden');
+            anime({
+                targets: '#edit-mode',
+                opacity: 1,
+                duration: 500,
+                easing: 'easeInOutQuad'
+            });
+        });
+
+        saveBtn.addEventListener('click', async () => {
+            const formData = new FormData(form);
+            try {
+                const response = await axios.post('{% url "course:course_edit" course.title %}', formData);
+                if (response.data.status === 'success') {
+                    location.reload();
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        });
+    </script>
+</body>
+</html>

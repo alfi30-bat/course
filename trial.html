@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prof. Smith's Educational Hub - Editable Course Page</title>
+    <style>
+        :root {
+            --primary-color: #8E44AD; /* Violet */
+            --secondary-color: #5D4037; /* Brown */
+            --accent-color: #C0CA33;
+            --background-color: #F3E5F5;
+            --text-color: #3E2723;
+        }
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            background-color: var(--background-color);
+        }
+        header {
+            background-color: var(--secondary-color);
+            color: white;
+            text-align: center;
+            padding: 1rem;
+        }
+        nav {
+            background-color: var(--primary-color);
+            padding: 0.5rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+        }
+        nav ul li {
+            margin: 0 1rem;
+        }
+        nav ul li a {
+            color: var(--text-color);
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+        nav ul li a:hover {
+            color: var(--accent-color);
+        }
+        main {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        .course-header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 2rem;
+            border-radius: 8px 8px 0 0;
+            text-align: center;
+        }
+        .course-content {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 0 0 8px 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .teacher-info {
+            display: flex;
+            align-items: center;
+            margin-top: 2rem;
+            padding: 1rem;
+            background-color: #F3E5F5;
+            border-radius: 8px;
+        }
+        .teacher-info img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            margin-right: 2rem;
+            object-fit: cover;
+        }
+        .apply-button {
+            display: inline-block;
+            background-color: var(--accent-color);
+            color: white;
+            padding: 1rem 2rem;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+            margin-top: 1rem;
+        }
+        .apply-button:hover {
+            background-color: #9E9D24;
+        }
+        @media (max-width: 768px) {
+            .teacher-info {
+                flex-direction: column;
+                text-align: center;
+            }
+            .teacher-info img {
+                margin-right: 0;
+                margin-bottom: 1rem;
+            }
+        }
+        [contenteditable="true"] {
+            border: 1px dashed #999;
+            padding: 5px;
+        }
+        [contenteditable="true"]:hover {
+            background-color: #f0f0f0;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="{% url 'main' %}">Home</a></li>
+            <li><a href="#">Courses</a></li>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Contact</a></li>
+            <li><a href="#">Login</a></li>
+            <li>
+                <form id="formm" method="post">
+                    {% csrf_token %}
+                    <button id="editToggle" type="button">Toggle Edit Mode</button>
+                </form>
+            </li>
+        </ul>
+    </nav>
+    <main role="main">
+        <div class="course-header">
+            <h2 contenteditable="false">{{course.title}}</h2>
+            <p contenteditable="false">Master complex mathematical concepts and problem-solving techniques</p>
+        </div>
+        <div class="course-content">
+            <h3>Course Overview</h3>
+            <p contenteditable="false">This comprehensive course dives deep into advanced mathematical concepts, equipping students with the tools to tackle complex problems in various fields. From abstract algebra to multivariable calculus, you'll expand your mathematical horizons and develop critical thinking skills essential for advanced studies and professional applications.</p>
+            <h3>What You'll Learn</h3>
+            <ul contenteditable="false">
+                <li>Advanced calculus and its applications</li>
+                <li>Linear algebra and vector spaces</li>
+                <li>Complex analysis and its real-world uses</li>
+                <li>Number theory and cryptography basics</li>
+                <li>Introduction to topology and manifolds</li>
+            </ul>
+            <h3>Course Details</h3>
+            <p contenteditable="false"><strong>Duration:</strong> 12 weeks</p>
+            <p contenteditable="false"><strong>Level:</strong> Advanced</p>
+            <p contenteditable="false"><strong>Prerequisites:</strong> Calculus I & II, Linear Algebra basics</p>
+            <a href="#" class="apply-button">Apply Now</a>
+            <div class="teacher-info">
+                <img src="/api/placeholder/150/150" alt="Professor Jane Doe">
+                <div>
+                    <h3 contenteditable="false">Meet Your Instructor: Professor Jane Doe</h3>
+                    <p contenteditable="false">Prof. Jane Doe holds a Ph.D. in Mathematical Sciences from MIT and has over 15 years of experience teaching advanced mathematics. Her research focuses on algebraic geometry and its applications in theoretical physics. Prof. Doe is known for her ability to explain complex concepts in an accessible manner, making her a favorite among students tackling advanced topics.</p>
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer>
+        <p contenteditable="false">© 2024 Prof. Smith's Educational Hub. All rights reserved.</p>
+    </footer>
+    <script>
+        const editToggle = document.getElementById('editToggle');
+        const editableElements = document.querySelectorAll('[contenteditable]');
+        const form = document.getElementById('formm');
+        let editMode = false;
+
+        editToggle.addEventListener('click', () => {
+            editMode = !editMode;
+            editableElements.forEach(el => {
+                el.contentEditable = editMode;
+            });
+
+            if (editMode) {
+                editToggle.textContent = 'Save Changes';
+                form.removeAttribute('method');
+            } else {
+                editToggle.textContent = 'Toggle Edit Mode';
+                form.setAttribute('method', 'post');
+                form.submit();  // Submit the form when saving changes
+            }
+        });
+    </script>
+</body>
+</html>
